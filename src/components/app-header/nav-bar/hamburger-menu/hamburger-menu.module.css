@@ -1,7 +1,7 @@
 /* https://jonsuh.com/hamburgers/ */
 
 .hamburger {
-  padding: 15px 15px;
+  padding: 6px 6px;
   display: inline-block;
   cursor: pointer;
   transition-property: opacity, filter;
@@ -31,8 +31,8 @@
 }
 
 .hamburger-box {
-  width: 40px;
-  height: 24px;
+  width: 20px;
+  height: 12px;
   display: inline-block;
   position: relative;
 }
@@ -46,10 +46,10 @@
 .hamburger-inner,
 .hamburger-inner::before,
 .hamburger-inner::after {
-  width: 40px;
-  height: 4px;
+  width: 20px;
+  height: 2px;
   background-color: #000;
-  border-radius: 4px;
+  border-radius: 2px;
   position: absolute;
   transition-property: transform;
   transition-duration: 0.15s;
@@ -63,11 +63,11 @@
 }
 
 .hamburger-inner::before {
-  top: -10px;
+  top: -5px;
 }
 
 .hamburger-inner::after {
-  bottom: -10px;
+  bottom: -5px;
 }
 
 .hamburger--spring .hamburger-inner {
@@ -76,12 +76,12 @@
 }
 
 .hamburger--spring .hamburger-inner::before {
-  top: 10px;
+  top: 5px;
   transition: top 0.1s 0.2s cubic-bezier(0.33333, 0.66667, 0.66667, 1), transform 0.13s cubic-bezier(0.55, 0.055, 0.675, 0.19);
 }
 
 .hamburger--spring .hamburger-inner::after {
-  top: 20px;
+  top: 10px;
   transition: top 0.2s 0.2s cubic-bezier(0.33333, 0.66667, 0.66667, 1), transform 0.13s cubic-bezier(0.55, 0.055, 0.675, 0.19);
 }
 
@@ -91,13 +91,13 @@
 }
 
 .hamburger--spring.is-active .hamburger-inner::before {
-  top: 0;
+  top: -5px;
   transition: top 0.1s 0.15s cubic-bezier(0.33333, 0, 0.66667, 0.33333), transform 0.13s 0.22s cubic-bezier(0.215, 0.61, 0.355, 1);
   transform: translate3d(0, 10px, 0) rotate(45deg);
 }
 
 .hamburger--spring.is-active .hamburger-inner::after {
-  top: 0;
+  top: -5px;
   transition: top 0.2s cubic-bezier(0.33333, 0, 0.66667, 0.33333), transform 0.13s 0.22s cubic-bezier(0.215, 0.61, 0.355, 1);
   transform: translate3d(0, 10px, 0) rotate(-45deg);
 }

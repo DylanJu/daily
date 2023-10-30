@@ -7,22 +7,22 @@ export default component$(() => {
     <nav>
       <ul>
         <li>
-          <a role="button" class="outline" href="/">
+          <a class="outline" href="/">
             목록
           </a>
         </li>
         <li>
-          <a role="button" class="outline" href="/read">
+          <a class="outline" href="/read">
             읽기
           </a>
         </li>
         <li>
-          <a role="button" class="outline" href="/write">
+          <a class="outline" href="/write">
             쓰기
           </a>
         </li>
         <li>
-          <a role="button" class="outline" href="/organize">
+          <a class="outline" href="/organize">
             정리
           </a>
         </li>
