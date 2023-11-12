@@ -1,6 +1,11 @@
-name = "sweet-feather-3b3e"
+name = "d1-tutorial"
 main = "src/index.ts"
-compatibility_date = "2023-10-30"
+compatibility_date = "2023-10-25"
+
+[[d1_databases]]
+binding = "DB" # i.e. available in your Worker on env.DB
+database_name = "real-me"
+database_id = "767fd7f2-cbc9-4540-8780-bedf45f93e1e"
 
 # Variable bindings. These are arbitrary, plaintext strings (similar to environment variables)
 # Note: Use secrets to store sensitive data.
