@@ -1,21 +1,22 @@
 import { component$ } from "@builder.io/qwik";
 import { routeAction$, Form } from "@builder.io/qwik-city";
-import type { DocumentHead, RequestHandler } from "@builder.io/qwik-city";
+import type { DocumentHead } from "@builder.io/qwik-city";
 
 export const useAddJourney = routeAction$(async (data, context) => {
-  console.log(context.env);
+  const db = context.platform.env?.DB
 
-  return { success: true, content: "123" };
-})
+  if (!db) {
+    return { success: false, content: "123" };
+  }
 
-export const onPost: RequestHandler = async ({next, env, platform}) => {
-  console.log('env', env);
-  console.log('platform', Object.keys(platform));
-  console.log('platform.env', platform.env?.['DB']);
-  // console.log('Before request', url);
-  await next();
-  // console.log('After request', url);
-};
+  const { results } = await db.prepare(
+    "SELECT * FROM Customers WHERE CompanyName = ?"
+  )
+    .bind("Bs Beverages")
+    .all();
+
+  return { success: true, content: JSON.stringify(results) };
+});
 
 export default component$(() => {
   const action = useAddJourney();
