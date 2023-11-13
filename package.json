@@ -24,7 +24,9 @@
     "preview": "qwik build preview && vite preview --open",
     "serve": "wrangler pages dev ./dist",
     "start": "vite --mode ssr --host",
-    "qwik": "qwik"
+    "qwik": "qwik",
+    "generate": "drizzle-kit generate:sqlite --schema=src/schema.ts",
+    "up": "drizzle-kit up:sqlite --schema=src/schema.ts"
   },
   "devDependencies": {
     "@builder.io/qwik": "^1.2.14",
@@ -34,6 +36,7 @@
     "@types/node": "^20.8.4",
     "@typescript-eslint/eslint-plugin": "^6.7.5",
     "@typescript-eslint/parser": "^6.7.5",
+    "drizzle-kit": "^0.20.2",
     "eslint": "^8.51.0",
     "eslint-plugin-qwik": "^1.2.14",
     "miniflare": "^3.20231025.1",
@@ -43,5 +46,8 @@
     "vite": "^4.4.11",
     "vite-tsconfig-paths": "^4.2.1",
     "wrangler": "^3.15.0"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.29.0"
   }
 }

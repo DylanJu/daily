@@ -1,6 +1,6 @@
-# name = "d1-tutorial"
-# main = "src/index.ts"
-# compatibility_date = "2023-10-25"
+name = "real-me"
+main = "db/index.ts"
+compatibility_date = "2023-10-25"
 
 [[d1_databases]]
 binding = "DB" # i.e. available in your Worker on env.DB

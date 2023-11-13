@@ -1,21 +1,27 @@
 import { component$ } from "@builder.io/qwik";
 import { routeAction$, Form } from "@builder.io/qwik-city";
 import type { DocumentHead } from "@builder.io/qwik-city";
+import { drizzle } from "drizzle-orm/d1";
+import { customers } from "~/schema";
 
 export const useAddJourney = routeAction$(async (data, context) => {
-  const db = context.platform.env?.DB
+  if (!context.platform.env?.DB) throw new Error("No DB");
 
-  if (!db) {
-    return { success: false, content: "123" };
+  const db = drizzle(context.platform.env.DB);
+
+  type InsertCustomer = typeof customers.$inferInsert
+
+  const newCustomer = {
+    // CustomerId: 102,
+    // CompanyName: "101 company",
+    ContactName: data.content,
   }
 
-  const { results } = await db.prepare(
-    "SELECT * FROM Customers WHERE CompanyName = ?"
-  )
-    .bind("Bs Beverages")
-    .all();
+  const result = await db.insert(customers).values(newCustomer as InsertCustomer).run();
 
-  return { success: true, content: JSON.stringify(results) };
+  console.log(typeof data, data);
+
+  return { success: true, content: result };
 });
 
 export default component$(() => {
@@ -31,7 +37,11 @@ export default component$(() => {
 
       {action.value?.success && (
         // When the action is done successfully, the `action.value` property will contain the return value of the action
-        <p>User {action.value.content} added successfully</p>
+        <p>User added successfully
+          <br />
+          {JSON.stringify(action.value.content)}
+        </p>
+        
       )}
     </div>
   );
