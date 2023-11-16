@@ -2,13 +2,13 @@ import { component$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { routeLoader$ } from "@builder.io/qwik-city";
 import { drizzle } from "drizzle-orm/d1";
-import { customers } from "~/schema";
+import { journals } from "~/schema";
 
 export const useProductDetails = routeLoader$(async (requestEvent) => {
   if (!requestEvent.platform.env?.DB) throw new Error("No DB");
 
   const db = drizzle(requestEvent.platform.env.DB);
-  const result = await db.select().from(customers).all()
+  const result = await db.select().from(journals).all()
   
   return { success: true, content: JSON.stringify(result) };
 });

@@ -2,22 +2,21 @@ import { component$ } from "@builder.io/qwik";
 import { routeAction$, Form } from "@builder.io/qwik-city";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { drizzle } from "drizzle-orm/d1";
-import { customers } from "~/schema";
+import { journals } from "~/schema";
 
 export const useAddJourney = routeAction$(async (data, context) => {
   if (!context.platform.env?.DB) throw new Error("No DB");
 
   const db = drizzle(context.platform.env.DB);
 
-  type InsertCustomer = typeof customers.$inferInsert
+  type InsertJournal = typeof journals.$inferInsert
 
-  const newCustomer = {
-    // CustomerId: 102,
-    // CompanyName: "101 company",
-    ContactName: data.content,
+  const journal: InsertJournal = {
+    title: data.title.toString(),
+    content: data.content.toString(),
   }
 
-  const result = await db.insert(customers).values(newCustomer as InsertCustomer).run();
+  const result = await db.insert(journals).values(journal).run();
 
   console.log(typeof data, data);
 
@@ -31,6 +30,9 @@ export default component$(() => {
     <div>
       <h1>Write</h1>
       <Form action={action}>
+        <label>Title</label>
+        <input name="title" />
+        <label>Content</label>
         <textarea name="content" />
         <button type="submit">submit</button>
       </Form>
