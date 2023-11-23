@@ -3,6 +3,7 @@ import type { DocumentHead } from "@builder.io/qwik-city";
 import { routeLoader$ } from "@builder.io/qwik-city";
 import { drizzle } from "drizzle-orm/d1";
 import { journals } from "~/schema";
+import { useAuthSession } from '~/routes/plugin@auth';
 
 export const useProductDetails = routeLoader$(async (requestEvent) => {
   if (!requestEvent.platform.env?.DB) throw new Error("No DB");
@@ -14,11 +15,16 @@ export const useProductDetails = routeLoader$(async (requestEvent) => {
 });
 
 export default component$(() => {
+  const session = useAuthSession();
+
   const signal = useProductDetails(); 
   return (
     <div>
       <h1>Read</h1>
       <div>{signal.value.content}</div>
+      <div>{session.value?.user?.email}</div>
+      <div>{session.value?.user?.name}</div>
+      <div>{session.value?.user?.image}</div>
     </div>
   );
 });
