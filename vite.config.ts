@@ -41,5 +41,6 @@ export default defineConfig(async ({ mode }) => {
         "Cache-Control": "public, max-age=600",
       },
     },
+    optimizeDeps: { include: ['@auth/core'] }
   };
 });

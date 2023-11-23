@@ -29,7 +29,9 @@
     "up": "drizzle-kit up:sqlite --schema=src/schema.ts"
   },
   "devDependencies": {
+    "@auth/core": "^0.13.0",
     "@builder.io/qwik": "^1.2.14",
+    "@builder.io/qwik-auth": "0.1.1",
     "@builder.io/qwik-city": "^1.2.14",
     "@cloudflare/workers-types": "^4.20231025.0",
     "@types/eslint": "^8.44.4",
