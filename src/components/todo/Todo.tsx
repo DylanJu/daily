@@ -14,6 +14,18 @@ const TodoRow = component$<{
   const checkboxRef = useSignal<HTMLInputElement>();
   const contentEditableRef = useSignal<HTMLElement>();
 
+  const setSelection$ = $(() => {
+    const newRange = document.createRange();
+    const selection = window.getSelection();
+    const element = contentEditableRef.value;
+    if (!element) return;
+
+    newRange.setStart(element, 0);
+    newRange.setEnd(element, 0);
+    selection?.removeAllRanges();
+    selection?.addRange(newRange);
+  });
+
   const onKeyDown$ = $((e: KeyboardEvent) => {
     console.group("key down");
     console.log(e.key);
@@ -34,6 +46,7 @@ const TodoRow = component$<{
 
   useVisibleTask$(({ cleanup }) => {
     contentEditableRef.value!.addEventListener("keydown", onKeyDown$);
+    setSelection$();
 
     cleanup(() => {
       contentEditableRef.value!.removeEventListener("keydown", onKeyDown$);

@@ -37,7 +37,7 @@ export default component$(() => {
   });
 
   useTask$(() => {
-    todos.value.set(uuid(), { checked: false, text: "" });
+    addTodo();
   });
 
   return (
