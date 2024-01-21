@@ -24,7 +24,7 @@ const TodoRow = component$<{
       return;
     }
 
-    if (e.key === "Delete" && !contentEditableRef.value!.textContent) {
+    if (e.key === "Backspace" && !contentEditableRef.value?.textContent) {
       removeTodo(id);
       return;
     }
@@ -50,10 +50,6 @@ const TodoRow = component$<{
         id={id}
         ref={contentEditableRef}
         contentEditable="true"
-        // onKeyDown$={(e) => {
-        //   console.log("key down", e.key);
-        // }}
-        // preventdefault:keydown
       >
       </div>
     </div>

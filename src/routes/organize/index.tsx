@@ -31,7 +31,9 @@ export default component$(() => {
   });
 
   const removeTodo = $((uuid: string) => {
-    todos.value.delete(uuid);
+    const newTodos = new Map(todos.value);
+    newTodos.delete(uuid);
+    todos.value = newTodos;
   });
 
   const updateTodo = $((uuid: string, todo: Todo) => {
