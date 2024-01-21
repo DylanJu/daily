@@ -8,8 +8,8 @@ const TodoRow = component$<{
   todo: Todo;
   addTodo: QRL<() => void>;
   removeTodo: QRL<(uuid: string) => void>;
-  updateTodo: QRL<(uuid: string, todo: Todo) => void>;
-}>(({ id, todo: { checked }, addTodo, removeTodo, updateTodo }) => {
+}>(({ id, todo: { checked }, addTodo, removeTodo }) => {
+  const checkboxRef = useSignal<HTMLInputElement>();
   const contentEditableRef = useSignal<HTMLElement>();
 
   const onKeyDown$ = $((e: KeyboardEvent) => {
@@ -28,11 +28,6 @@ const TodoRow = component$<{
       removeTodo(id);
       return;
     }
-
-    updateTodo(id, {
-      checked,
-      text: contentEditableRef.value?.textContent || "",
-    });
   });
 
   useVisibleTask$(({ cleanup }) => {
@@ -45,7 +40,7 @@ const TodoRow = component$<{
 
   return (
     <div data-id={id}>
-      <input type="checkbox" checked={checked} />
+      <input ref={checkboxRef} type="checkbox" checked={checked} />
       <div
         id={id}
         ref={contentEditableRef}

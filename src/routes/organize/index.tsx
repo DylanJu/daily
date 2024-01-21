@@ -36,10 +36,6 @@ export default component$(() => {
     todos.value = newTodos;
   });
 
-  const updateTodo = $((uuid: string, todo: Todo) => {
-    todos.value.set(uuid, todo);
-  });
-
   useTask$(() => {
     todos.value.set(uuid(), { checked: false, text: "" });
   });
@@ -55,7 +51,6 @@ export default component$(() => {
             todo={todo}
             addTodo={addTodo}
             removeTodo={removeTodo}
-            updateTodo={updateTodo}
           />
         ))}
       </div>
