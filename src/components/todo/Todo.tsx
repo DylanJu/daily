@@ -9,22 +9,11 @@ const TodoRow = component$<{
   id: string;
   todo: Todo;
   addTodo: QRL<() => void>;
-  removeTodo: QRL<(uuid: string) => void>;
-}>(({ id, todo: { checked }, addTodo, removeTodo }) => {
+  removeTodo: QRL<(id: string) => void>;
+  setSelection: (id: string) => void;
+}>(({ id, todo, addTodo, removeTodo, setSelection }) => {
   const checkboxRef = useSignal<HTMLInputElement>();
   const contentEditableRef = useSignal<HTMLElement>();
-
-  const setSelection$ = $(() => {
-    const newRange = document.createRange();
-    const selection = window.getSelection();
-    const element = contentEditableRef.value;
-    if (!element) return;
-
-    newRange.setStart(element, 0);
-    newRange.setEnd(element, 0);
-    selection?.removeAllRanges();
-    selection?.addRange(newRange);
-  });
 
   const onKeyDown$ = $((e: KeyboardEvent) => {
     console.group("key down");
@@ -46,7 +35,7 @@ const TodoRow = component$<{
 
   useVisibleTask$(({ cleanup }) => {
     contentEditableRef.value!.addEventListener("keydown", onKeyDown$);
-    setSelection$();
+    setSelection(id);
 
     cleanup(() => {
       contentEditableRef.value!.removeEventListener("keydown", onKeyDown$);
@@ -54,8 +43,8 @@ const TodoRow = component$<{
   });
 
   return (
-    <div data-id={id} class={styles.todoRow}>
-      <input ref={checkboxRef} type="checkbox" checked={checked} />
+    <div data-id={id} class={styles.todoRow} onClick$={() => setSelection(id)}>
+      <input ref={checkboxRef} type="checkbox" checked={todo.checked} />
       <div
         id={id}
         ref={contentEditableRef}
