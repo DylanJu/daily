@@ -26,26 +26,16 @@ export default component$(() => {
   });
 
   const setSelection = $((currentId: string, last?: boolean) => {
-    const newRange = document.createRange();
+    const range = document.createRange();
     const selection = window.getSelection();
     const element = document.getElementById(currentId);
     if (!element) return;
 
-    if (last) {
-      // todo: 동작안함
-      console.log(element)
-      console.log(element.textContent)
-      const length = element.textContent?.length ?? 0;
-      newRange.setStart(element, length - 1);
-      newRange.setEnd(element, length - 1);
-    } else {
-      newRange.setStart(element, 0);
-      newRange.setEnd(element, 0);
-      // newRange.collapse(true)
-    }
+    range.selectNodeContents(element);
+    range.collapse(!last);
 
     selection?.removeAllRanges();
-    selection?.addRange(newRange);
+    selection?.addRange(range);
   });
 
   const focusOnPrevTodo = $((currentId: string) => {
