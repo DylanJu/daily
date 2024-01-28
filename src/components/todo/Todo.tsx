@@ -6,12 +6,14 @@ import type { Todo } from "~/routes/organize";
 import styles from "./Todo.module.css";
 
 const TodoRow = component$<{
-  id: string;
+  prevId?: string;
+  currentId: string;
+  nextId?: string;
   todo: Todo;
   addTodo: QRL<() => void>;
-  removeTodo: QRL<(id: string) => void>;
-  setSelection: (id: string) => void;
-}>(({ id, todo, addTodo, removeTodo, setSelection }) => {
+  removeTodo: QRL<(currentId: string, prevId?: string) => void>;
+  setSelection: (currentId: string) => void;
+}>(({ nextId, currentId, prevId, todo, addTodo, removeTodo, setSelection }) => {
   const checkboxRef = useSignal<HTMLInputElement>();
   const contentEditableRef = useSignal<HTMLElement>();
 
@@ -28,14 +30,14 @@ const TodoRow = component$<{
     }
 
     if (e.key === "Backspace" && !contentEditableRef.value?.textContent) {
-      removeTodo(id);
+      removeTodo(currentId, prevId);
       return;
     }
   });
 
   useVisibleTask$(({ cleanup }) => {
     contentEditableRef.value!.addEventListener("keydown", onKeyDown$);
-    setSelection(id);
+    setSelection(currentId);
 
     cleanup(() => {
       contentEditableRef.value!.removeEventListener("keydown", onKeyDown$);
@@ -43,10 +45,10 @@ const TodoRow = component$<{
   });
 
   return (
-    <div data-id={id} class={styles.todoRow} onClick$={() => setSelection(id)}>
+    <div data-currentId={currentId} class={styles.todoRow} onClick$={() => setSelection(currentId)}>
       <input ref={checkboxRef} type="checkbox" checked={todo.checked} />
       <div
-        id={id}
+        id={currentId}
         ref={contentEditableRef}
         contentEditable="true"
       >

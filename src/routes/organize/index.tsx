@@ -27,7 +27,7 @@ export default component$(() => {
 
   const setSelection = $((currentId: string, last?: boolean) => {
     const range = document.createRange();
-    const selection = window.getSelection();
+    const selection = document.getSelection();
     const element = document.getElementById(currentId);
     if (!element) return;
 
@@ -38,40 +38,32 @@ export default component$(() => {
     selection?.addRange(range);
   });
 
-  const focusOnPrevTodo = $((currentId: string) => {
-    let prevKey = undefined;
-    for (const id of todos.value.keys()) {
-      if (id === currentId) {
-        return;
-      }
-      prevKey = id;
-    }
-
-    if (prevKey) {
-      setSelection(prevKey, true);
-    }
-  });
-
-  const removeTodo = $((uuid: string) => {
+  const removeTodo = $((uuid: string, prevId?: string) => {
     const newTodos = new Map(todos.value);
     newTodos.delete(uuid);
     todos.value = newTodos;
 
-    focusOnPrevTodo(uuid);
+    if (prevId) {
+      setSelection(prevId, true);
+    }
   });
 
   useTask$(() => {
     addTodo();
   });
 
+  const todoList = Array.from(todos.value);
+
   return (
     <>
-      <div>{Array.from(todos.value).map(([k]) => k + "\n")}</div>
+      <div>{todoList.map(([k]) => k + "\n")}</div>
       <div id="editor" class={styles.editor}>
-        {Array.from(todos.value).map(([uuid, todo]) => (
+        {todoList.map(([currentId, todo], i) => (
           <TodoRow
-            key={uuid}
-            id={uuid}
+            key={currentId}
+            prevId={todoList[i - 1]?.[0]}
+            currentId={currentId}
+            nextId={todoList[i + 1]?.[0]}
             todo={todo}
             addTodo={addTodo}
             removeTodo={removeTodo}
