@@ -12,50 +12,77 @@ const TodoRow = component$<{
   todo: Todo;
   addTodo: QRL<() => void>;
   removeTodo: QRL<(currentId: string, prevId?: string) => void>;
-  setSelection: (currentId: string) => void;
-}>(({ nextId, currentId, prevId, todo, addTodo, removeTodo, setSelection }) => {
-  const checkboxRef = useSignal<HTMLInputElement>();
-  const contentEditableRef = useSignal<HTMLElement>();
+  onArrowUpKeyDown: QRL<(currentId: string, prevId?: string) => void>;
+  onArrowDownKeyDown: QRL<(currentId: string, nextId?: string) => void>;
+  setSelection: (currentId: string, last?: boolean) => void;
+}>(
+  ({
+    nextId,
+    currentId,
+    prevId,
+    todo,
+    addTodo,
+    removeTodo,
+    onArrowUpKeyDown,
+    onArrowDownKeyDown,
+    setSelection,
+  }) => {
+    const checkboxRef = useSignal<HTMLInputElement>();
+    const contentEditableRef = useSignal<HTMLElement>();
 
-  const onKeyDown$ = $((e: KeyboardEvent) => {
-    console.group("key down");
-    console.log(e.key);
-    console.log(contentEditableRef.value?.textContent);
-    console.groupEnd();
+    const onKeyDown$ = $((e: KeyboardEvent) => {
+      // console.group("key down");
+      // console.log(e.key);
+      // console.log(contentEditableRef.value?.textContent);
+      // console.groupEnd();
 
-    if (e.key === "Enter") {
-      addTodo();
-      e.preventDefault();
-      return;
-    }
+      if (e.key === "Enter") {
+        addTodo();
+        e.preventDefault();
+        return;
+      }
 
-    if (e.key === "Backspace" && !contentEditableRef.value?.textContent) {
-      removeTodo(currentId, prevId);
-      return;
-    }
-  });
+      if (e.key === "Backspace" && !contentEditableRef.value?.textContent) {
+        removeTodo(currentId, prevId);
+        return;
+      }
 
-  useVisibleTask$(({ cleanup }) => {
-    contentEditableRef.value!.addEventListener("keydown", onKeyDown$);
-    setSelection(currentId);
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        onArrowUpKeyDown(currentId, prevId);
+        return;
+      }
 
-    cleanup(() => {
-      contentEditableRef.value!.removeEventListener("keydown", onKeyDown$);
+      if (e.key === "ArrowDown") {
+        onArrowDownKeyDown(currentId, nextId);
+        return;
+      }
     });
-  });
 
-  return (
-    <div data-currentId={currentId} class={styles.todoRow}>
-      <input ref={checkboxRef} type="checkbox" checked={todo.checked} />
+    useVisibleTask$(({ cleanup }) => {
+      contentEditableRef.value!.addEventListener("keydown", onKeyDown$);
+      setSelection(currentId);
+
+      cleanup(() => {
+        contentEditableRef.value!.removeEventListener("keydown", onKeyDown$);
+      });
+    });
+
+    return (
       <div
-        id={currentId}
-        class={styles.input}
-        ref={contentEditableRef}
-        contentEditable="true"
+        data-currentId={currentId}
+        class={styles.todoRow}
       >
+        <input ref={checkboxRef} type="checkbox" checked={todo.checked} />
+        <div
+          id={currentId}
+          ref={contentEditableRef}
+          contentEditable="true"
+          class={styles.input}
+        ></div>
       </div>
-    </div>
-  );
-});
+    );
+  }
+);
 
 export default TodoRow;
