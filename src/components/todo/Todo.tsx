@@ -45,10 +45,11 @@ const TodoRow = component$<{
   });
 
   return (
-    <div data-currentId={currentId} class={styles.todoRow} onClick$={() => setSelection(currentId)}>
+    <div data-currentId={currentId} class={styles.todoRow}>
       <input ref={checkboxRef} type="checkbox" checked={todo.checked} />
       <div
         id={currentId}
+        class={styles.input}
         ref={contentEditableRef}
         contentEditable="true"
       >
