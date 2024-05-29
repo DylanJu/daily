@@ -8,6 +8,8 @@ import styles from "./index.module.css";
 export type Todo = {
   checked: boolean;
   text: string;
+  createdAt: number;
+  completedAt: number;
 };
 
 export default component$(() => {
@@ -21,7 +23,12 @@ export default component$(() => {
       return;
     }
     const newTodos = new Map(todos.value);
-    newTodos.set(newId, { checked: false, text: "" });
+    newTodos.set(newId, {
+      checked: false,
+      text: "",
+      createdAt: Date.now(),
+      completedAt: 0,
+    });
     todos.value = newTodos;
   });
 
@@ -129,25 +136,22 @@ export default component$(() => {
   const todoList = Array.from(todos.value);
 
   return (
-    <>
-      <div>{todoList.map(([k]) => k + "\n")}</div>
-      <div id="editor" class={styles.editor}>
-        {todoList.map(([currentId, todo], i) => (
-          <TodoRow
-            key={currentId}
-            prevId={todoList[i - 1]?.[0]}
-            currentId={currentId}
-            nextId={todoList[i + 1]?.[0]}
-            todo={todo}
-            addTodo={addTodo}
-            removeTodo={removeTodo}
-            onArrowUpKeyDown={onArrowUpKeyDown}
-            onArrowDownKeyDown={onArrowDownKeyDown}
-            setSelection={setSelection}
-          />
-        ))}
-      </div>
-    </>
+    <div id="editor" class={styles.editor}>
+      {todoList.map(([currentId, todo], i) => (
+        <TodoRow
+          key={currentId}
+          prevId={todoList[i - 1]?.[0]}
+          currentId={currentId}
+          nextId={todoList[i + 1]?.[0]}
+          todo={todo}
+          addTodo={addTodo}
+          removeTodo={removeTodo}
+          onArrowUpKeyDown={onArrowUpKeyDown}
+          onArrowDownKeyDown={onArrowDownKeyDown}
+          setSelection={setSelection}
+        />
+      ))}
+    </div>
   );
 });
 

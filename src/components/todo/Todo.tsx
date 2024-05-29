@@ -1,5 +1,6 @@
 import type { QRL } from "@builder.io/qwik";
 import { component$, $, useVisibleTask$, useSignal } from "@builder.io/qwik";
+import { format } from "date-fns";
 
 import type { Todo } from "~/routes/organize";
 
@@ -69,10 +70,7 @@ const TodoRow = component$<{
     });
 
     return (
-      <div
-        data-currentId={currentId}
-        class={styles.todoRow}
-      >
+      <div data-currentId={currentId} class={styles.todoRow}>
         <input ref={checkboxRef} type="checkbox" checked={todo.checked} />
         <div
           id={currentId}
@@ -80,6 +78,16 @@ const TodoRow = component$<{
           contentEditable="true"
           class={styles.input}
         ></div>
+        <div class="secondary">
+          <small class="secondary">
+            시작시간: {format(todo.createdAt, "yyyy-MM-dd HH:mm (ccc)")}
+          </small>
+          {todo.completedAt > 0 ? (
+            <small>
+              종료시간: {format(todo.completedAt, "yyyy-MM-dd HH:mm (ccc)")}
+            </small>
+          ) : null}
+        </div>
       </div>
     );
   }
